@@ -663,10 +663,11 @@ function Landing({onStart}){
 function ApiSetup({onSave}){
   const [key,setKey]=useState(""), [ld,setLd]=useState(false), [err,setErr]=useState("");
   const handle=async()=>{
-    if(!key.trim()){setErr("Insira a chave de API.");return;}
-    setLd(true);setErr("");
-    try{await claude(key.trim(),[{role:"user",content:"oi"}],"",5);onSave(key.trim());}
-    catch{setErr("Chave inválida. Verifique e tente novamente.");setLd(false);}
+    const k = key.trim();
+    if(!k){setErr("Insira a chave de API.");return;}
+    if(!k.startsWith("sk-ant-")){setErr("Formato inválido. A chave começa com sk-ant-...");return;}
+    // Skip live test — just validate format and save
+    onSave(k);
   };
   return(
     <div style={{minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"24px"}}>
